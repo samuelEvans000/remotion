@@ -5,6 +5,7 @@
   "scripts": {
     "studio": "remotion studio preview/index.ts",
     "gallery": "vite --config preview/gallery/vite.config.ts",
+    "build": "vite build --config preview/gallery/vite.config.ts",
     "typecheck": "tsc --noEmit",
     "render:stills": "node preview/render-stills.mjs"
   },
