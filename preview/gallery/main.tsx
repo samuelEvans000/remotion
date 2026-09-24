@@ -4,13 +4,20 @@ import { Player } from '@remotion/player';
 import { PreviewComposition } from '../PreviewComposition';
 import { FPS, HEIGHT, SAMPLES, WIDTH, sampleToData, type Sample } from '../sampleData';
 
-const CATEGORIES = ['all', ...new Set(SAMPLES.map((s) => s.category))];
+const NEW_TAB = 'newly added';
+const CATEGORIES = ['all', NEW_TAB, ...new Set(SAMPLES.map((s) => s.category))];
+
+function inCategory(sample: Sample, category: string): boolean {
+  if (category === 'all') return true;
+  if (category === NEW_TAB) return Boolean(sample.isNew);
+  return sample.category === category;
+}
 
 function inputPropsOf(sample: Sample) {
   return { data: sampleToData(sample), backdrop: sample.backdrop };
 }
 
-/** Mounts the Player only while the tile is on screen, so 165 players don't run at once. */
+/** Mounts the Player only while the tile is on screen, so hundreds of players don't run at once. */
 function Tile({ sample, onOpen }: { sample: Sample; onOpen: () => void }) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
@@ -88,7 +95,7 @@ function App() {
   const [query, setQuery] = useState('');
   const [open, setOpen] = useState<Sample | null>(null);
   const shown = SAMPLES.filter(
-    (s) => (category === 'all' || s.category === category) && s.type.includes(query.trim().toLowerCase().replace(/[\s-]+/g, '_')),
+    (s) => inCategory(s, category) && s.type.includes(query.trim().toLowerCase().replace(/[\s-]+/g, '_')),
   );
   return (
     <>

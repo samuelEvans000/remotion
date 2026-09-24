@@ -146,6 +146,9 @@ import {
   WaveHello,
   WaveText,
 } from './rendercomp/RenderComp';
+import { LOCOMOTION_RENDERERS } from './locomotion';
+import { THEME_RENDERERS } from './themes';
+import { PhoneScene } from './phone/PhoneScene';
 
 export const TEMPLATE_RENDERERS: Record<string, ComponentType<TemplateProps>> = {
   bar_chart: BarChart,
@@ -276,4 +279,7 @@ export const TEMPLATE_RENDERERS: Record<string, ComponentType<TemplateProps>> = 
   typewriter: TypewriterMachine,
   wave_hello: WaveHello,
   wave_text: WaveText,
+  ...LOCOMOTION_RENDERERS,
+  ...THEME_RENDERERS,
+  phone_scene: PhoneScene,
 };

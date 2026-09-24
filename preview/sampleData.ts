@@ -3,6 +3,7 @@
  * Each entry becomes one composition in Remotion Studio and one tile in the gallery.
  */
 import type { InfographicData } from '../types';
+import { EXTERNAL_SAMPLES } from './externalSamples';
 
 export const FPS = 30;
 export const WIDTH = 1920;
@@ -17,6 +18,8 @@ export type Sample = {
   durationFrames: number;
   backdrop: Backdrop;
   props: Record<string, unknown>;
+  /** Ported from the three external repos; shown under "newly added". */
+  isNew?: boolean;
 };
 
 const img = (seed: string, w = 1280, h = 720) => `https://picsum.photos/seed/${seed}/${w}/${h}`;
@@ -245,15 +248,18 @@ const CATEGORIES: Record<string, Row[]> = {
   ).map((style): Row => [style, { displayText: `Entrance: ${style}`, text_animation_style: style }, { bg: 'photo' }]),
 };
 
-export const SAMPLES: Sample[] = Object.entries(CATEGORIES).flatMap(([category, rows]) =>
-  rows.map(([type, props, opts]) => ({
-    type,
-    category,
-    durationFrames: opts?.d ?? 150,
-    backdrop: opts?.bg ?? 'dark',
-    props,
-  })),
-);
+export const SAMPLES: Sample[] = [
+  ...Object.entries(CATEGORIES).flatMap(([category, rows]) =>
+    rows.map(([type, props, opts]) => ({
+      type,
+      category,
+      durationFrames: opts?.d ?? 150,
+      backdrop: opts?.bg ?? 'dark',
+      props,
+    })),
+  ),
+  ...EXTERNAL_SAMPLES.map((s) => ({ ...s, isNew: true })),
+];
 
 export function sampleToData(sample: Sample): InfographicData {
   return {
